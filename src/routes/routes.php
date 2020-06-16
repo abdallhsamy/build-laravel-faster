@@ -1,8 +1,8 @@
 <?php
 
 /* GUI */
-Route::get('/pipe-dream', '\PipeDream\LaravelCreate\Controllers\PipeDreamWebController@index');
+Route::get('/faster', '\PipeDream\LaravelCreate\Controllers\PipeDreamWebController@index');
 
 /* API */
-Route::post('pipe-dream/api/build', '\PipeDream\LaravelCreate\Controllers\PipeDreamAPIController@build');
-Route::patch('pipe-dream/api/save', '\PipeDream\LaravelCreate\Controllers\PipeDreamAPIController@save');
+Route::post('faster/api/build', '\PipeDream\LaravelCreate\Controllers\PipeDreamAPIController@build');
+Route::patch('faster/api/save', '\PipeDream\LaravelCreate\Controllers\PipeDreamAPIController@save');

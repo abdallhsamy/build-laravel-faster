@@ -14,14 +14,14 @@ class PipeDreamBuild extends Command
      *
      * @var string
      */
-    protected $signature = 'pipedream:build';
+    protected $signature = 'faster:build';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rebuild PipeDream from source files';
+    protected $description = 'Rebuild Faster from source files';
 
     /**
      * Execute the console command.
@@ -30,7 +30,7 @@ class PipeDreamBuild extends Command
      */
     public function handle()
     {
-        $this->info("Rebuilding PipeDream...");
+        $this->info("Rebuilding Faster...");
 
         $appJSPath = __DIR__ . "/../resources/js/app.js";
         $appJSOriginal = file_get_contents(__DIR__ . "/../resources/js/app_backup.js");
@@ -42,11 +42,11 @@ class PipeDreamBuild extends Command
         $level2 = Collect(glob($nodeModules . DIRECTORY_SEPARATOR . "*/*/package.json"));
         $modules = $level1->merge($level2);
 
-        $this->info("\nDiscovering PipeDream packages");
+        $this->info("\nDiscovering Faster packages");
         $bar = $this->output->createProgressBar();
         $bar->start();
 
-        $pipeDreamModules = [];
+        $fasterModules = [];
         $master = [];
         foreach ($modules as $module) {
             $bar->advance();
@@ -56,30 +56,30 @@ class PipeDreamBuild extends Command
                 $master[rtrim($module, "/package.json")] = $p["PipeDream"];
                 continue;
             }
-            $pipeDreamModules[rtrim($module, "/package.json")] = $p["PipeDream"];
+            $fasterModules[rtrim($module, "/package.json")] = $p["PipeDream"];
         }
 
-        $pipeDreamModules = array_merge($master, $pipeDreamModules);
+        $fasterModules = array_merge($master, $fasterModules);
 
         $bar->finish();
         $this->info("\n");
-        if (count($pipeDreamModules) === 0) {
-            $this->error("No PipeDream modules found!");
+        if (count($fasterModules) === 0) {
+            $this->error("No Faster modules found!");
             return;
         }
-        foreach ($pipeDreamModules as $pipeDreamModule) {
-            $this->info("Discovered package: " . $pipeDreamModule);
+        foreach ($fasterModules as $fasterModule) {
+            $this->info("Discovered package: " . $fasterModule);
         }
-        $overwritten = str_replace("/* file factories will be automatically added */", implode(", ", $pipeDreamModules), $app);
-        array_walk($pipeDreamModules, function (&$v, $path) {
+        $overwritten = str_replace("/* file factories will be automatically added */", implode(", ", $fasterModules), $app);
+        array_walk($fasterModules, function (&$v, $path) {
             $v = 'import {' . $v . '} from "' . str_replace('\\', '/', $path) . '"';
         });
-        $overwritten = str_replace("/* imports will be automatically added */", implode(";\n", $pipeDreamModules), $overwritten);
+        $overwritten = str_replace("/* imports will be automatically added */", implode(";\n", $fasterModules), $overwritten);
 
         file_put_contents($appJSPath, $overwritten);
 
         if(!file_exists($PDFolder . "node_modules")){
-            $this->info("Building PipeDream Node modules...");
+            $this->info("Building Faster Node modules...");
             exec("cd " . $PDFolder . " && npm install");
         }
 
@@ -89,7 +89,7 @@ class PipeDreamBuild extends Command
             file_put_contents($appJSPath, $app);
             exit(0);
         }
-        $this->info("PipeDream was built successfully, go build something awesome!");
+        $this->info("Faster was built successfully, go build something awesome!");
         // set app.js back to the template for the next update
         file_put_contents($appJSPath, $appJSOriginal);
     }

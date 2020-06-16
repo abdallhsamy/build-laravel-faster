@@ -1,10 +1,11 @@
 {
-    "name": "pipe-dream/laravel-create",
+    "name": "abdallhsamy/build-laravel-faster",
     "type": "package",
     "description": "Watch how this package DESTROYS all other generators. Boilerplate repos HATE it!",
     "keywords": [
         "laravel",
-        "package"
+        "package",
+        "generators"
     ],
     "license": "MIT",
     "require": {
